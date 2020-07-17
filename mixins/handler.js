@@ -17,9 +17,9 @@ export const handler = {
       }
       this.notificationDialog = true;
       this.loadingDialog = false;
-      setTimeout(() => {
+      this.timer = setTimeout(() => {
         this.close();
-      }, 3000);
+      }, 4000);
     }
   }
 };

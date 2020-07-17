@@ -81,11 +81,13 @@ export default {
     notification,
     loading
   },
+  middleware: "auth",
+  auth: "guest",
   mixins: [handler],
   data() {
     return {
       showText: false,
-      time: "",
+      timer: "",
       username: "",
       role: "Student",
       email: "",
@@ -98,7 +100,7 @@ export default {
       passwordRules: [
         v => !!v || "Password is required",
         v => v.length >= 8 || "Password must be at least 8 characters",
-        v => v.length <= 16 || "Password must be not be less than 16 characters"
+        v => v.length <= 16 || "Password must be not be more than 16 characters"
       ],
       emailRules: [
         v => !!v || "E-mail is required",
@@ -125,7 +127,6 @@ export default {
         };
 
         let res = await this.$axios.$post("/api/auth/register", data);
-        this.loadingDialog = false;
 
         // If succesfully signed up, login user
         if (res.success) {
@@ -136,14 +137,9 @@ export default {
             }
           });
 
+          this.loadingDialog = false;
           this.$router.push("/");
         }
-
-        this.loadingDialog = false;
-
-        this.timer = setTimeout(() => {
-          this.close();
-        }, 4000);
       } catch (error) {
         this.handleError(error);
       }

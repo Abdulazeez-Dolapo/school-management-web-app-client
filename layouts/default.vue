@@ -29,22 +29,28 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-btn text to="/login" class="ma-0">
+      <v-btn text to="/login" class="ma-0" v-if="!$auth.$state.loggedIn">
         Login
       </v-btn>
 
-      <v-btn
-        text
-        v-if="$auth.$state.user.role === 'Tutor'"
-        to="/course/create"
-        class="ma-0"
-      >
-        Create Course
-      </v-btn>
+      <template v-if="$auth.$state.loggedIn">
+        <v-btn
+          text
+          v-if="$auth.$state.user.role === 'Tutor'"
+          to="/course/create"
+          class="ma-0"
+        >
+          Create Course
+        </v-btn>
+      </template>
 
       <template v-if="$auth.$state.loggedIn">
-        <nuxt-link to="/dashboard" style="text-decoration: none; color: black">
-          {{ $auth.$state.user.name }}
+        <nuxt-link
+          to="/dashboard"
+          class="text-capitalize"
+          style="text-decoration: none; color: black"
+        >
+          <span>Welcome, </span> {{ $auth.$state.user.name }}
         </nuxt-link></template
       >
     </v-app-bar>
