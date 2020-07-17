@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
@@ -24,94 +24,70 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
+
+    <v-app-bar :clipped-left="clipped" fixed app class="elevation-0">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>mdi-menu</v-icon>
+      <v-btn text to="/login" class="ma-0">
+        Login
       </v-btn>
+
+      <v-btn
+        text
+        v-if="$auth.$state.user.role === 'Tutor'"
+        to="/course/create"
+        class="ma-0"
+      >
+        Create Course
+      </v-btn>
+
+      <template v-if="$auth.$state.loggedIn">
+        <nuxt-link to="/dashboard" style="text-decoration: none; color: black">
+          {{ $auth.$state.user.name }}
+        </nuxt-link></template
+      >
     </v-app-bar>
-    <v-content>
-      <v-container>
+
+    <v-main>
+      <v-container fluid>
         <nuxt />
       </v-container>
-    </v-content>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer
-      :fixed="fixed"
-      app
-    >
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+    </v-main>
+
+    <v-footer :fixed="fixed" app>
+      <v-row class="ma-0 justify-center">
+        <span
+          >Abdulazeez Dolapo Abdulrafiu &copy;
+          {{ new Date().getFullYear() }}</span
+        >
+      </v-row>
     </v-footer>
   </v-app>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       clipped: false,
       drawer: false,
       fixed: false,
       items: [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
+          icon: "mdi-apps",
+          title: "Home",
+          to: "/"
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
+          icon: "mdi-chart-bubble",
+          title: "Dashboard",
+          to: "/dashboard"
         }
       ],
       miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
-    }
+      title: "School Management App"
+    };
   }
-}
+};
 </script>
