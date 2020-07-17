@@ -33,6 +33,10 @@
         Login
       </v-btn>
 
+      <v-btn text @click="logout" class="ma-0" v-else>
+        Logout
+      </v-btn>
+
       <template v-if="$auth.$state.loggedIn">
         <v-btn
           text
@@ -45,13 +49,9 @@
       </template>
 
       <template v-if="$auth.$state.loggedIn">
-        <nuxt-link
-          to="/dashboard"
-          class="text-capitalize"
-          style="text-decoration: none; color: black"
-        >
+        <v-btn to="/dashboard" class="text-capitalize" text>
           <span>Welcome, </span> {{ $auth.$state.user.name }}
-        </nuxt-link></template
+        </v-btn></template
       >
     </v-app-bar>
 
@@ -94,6 +94,11 @@ export default {
       miniVariant: false,
       title: "School Management App"
     };
+  },
+  methods: {
+    logout() {
+      this.$auth.logout();
+    }
   }
 };
 </script>
