@@ -21,7 +21,21 @@
         v-for="course in courses"
         :key="course._id"
       >
-        <card :course="course" />
+        <card :course="course">
+          <template #action-buttons>
+            <v-btn icon color="primary" @click="editCourse(course._id)">
+              <v-icon>
+                mdi-pencil-outline
+              </v-icon>
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn icon color="error" @click="deleteCourse(course._id)">
+              <v-icon>
+                mdi-delete
+              </v-icon>
+            </v-btn>
+          </template>
+        </card>
       </v-col>
     </v-row>
   </div>
@@ -40,7 +54,18 @@ export default {
   },
   data: () => ({
     courses: [],
-    userDetails: {}
-  })
+    userDetails: {},
+    id: ""
+  }),
+  methods: {
+    deleteCourse(id) {
+      console.log(id);
+    },
+    editCourse(id) {
+      this.$router.push({
+        path: `/course/edit/${id}`
+      });
+    }
+  }
 };
 </script>

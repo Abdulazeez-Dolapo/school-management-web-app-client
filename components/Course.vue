@@ -108,17 +108,17 @@ export default {
         this.loadingDialog = true;
         this.loadingText = "Creating course";
 
-        const data = {
+        const payload = {
           title: this.title,
           description: this.description,
           price: this.price
         };
 
-        let { course, message } = await this.$axios.$post(
+        const { message } = await this.$axios.$post(
           "/api/course/create",
-          data
+          payload
         );
-        console.log(course);
+
         this.loadingDialog = false;
         this.notificationDialog = true;
         this.notificationText = message;
@@ -133,32 +133,51 @@ export default {
     async editCourse() {
       try {
         // Validate form inputs
-        if (!this.$refs.registerForm.validate()) return;
+        if (!this.$refs.courseForm.validate()) return;
         this.loadingDialog = true;
-        this.notificationDialog = false;
-        this.notificationText = "";
+        this.loadingText = "Editing course";
 
-        const data = {
-          name: this.username,
-          role: this.role,
-          email: this.email,
-          password: this.password
+        const payload = {
+          title: this.title,
+          description: this.description,
+          price: this.price
         };
 
-        let res = await this.$axios.$post("/api/auth/register", data);
+        const id = this.$route.params.id;
+        const { message } = await this.$axios.$put(
+          `/api/course/update/${id}`,
+          payload
+        );
 
-        // If succesfully signed up, login user
-        if (res.success) {
-          const res = await this.$auth.loginWith("local", {
-            data: {
-              email: this.email,
-              password: this.password
-            }
-          });
+        const courses = JSON.parse(localStorage.getItem("courses"));
+        const index = courses.findIndex(course => course._id == id);
+        const course = courses[index];
+        course.title = this.title;
+        course.description = this.description;
+        course.price = this.price;
+        courses.splice(index, 1, course);
+        localStorage.setItem("courses", JSON.stringify(courses));
 
-          this.loadingDialog = false;
-          this.$router.push("/");
-        }
+        this.loadingDialog = false;
+        this.notificationDialog = true;
+        this.notificationText = message;
+
+        setTimeout(() => {
+          this.$router.push({ path: "/dashboard/tutor" });
+        }, 1000);
+      } catch (error) {
+        // console.log(error);
+        this.handleError(error);
+      }
+    },
+    async getCourse(id) {
+      try {
+        const { course } = await this.$axios.$get(
+          `/api/course/get-course/${id}`
+        );
+        this.title = course.title;
+        this.description = course.description;
+        this.price = course.price;
       } catch (error) {
         this.handleError(error);
       }

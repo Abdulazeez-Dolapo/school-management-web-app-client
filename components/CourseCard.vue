@@ -1,5 +1,5 @@
 <template>
-  <v-card @click="viewCourse(displayedCourse._id)" class="pb-0">
+  <v-card @click.self="viewCourse(displayedCourse._id)" class="pb-0">
     <v-row class="pa-2 ma-0 justify-start">
       <p
         class="title black--text ma-0 font-weight-medium text-truncate text-capitalize"
@@ -24,6 +24,10 @@
           displayedCourse.price == 0 ? "Free" : `$${displayedCourse.price}`
         }}</span>
       </p>
+    </v-row>
+
+    <v-row class="pa-2 ma-0 justify-start">
+      <slot name="action-buttons"></slot>
     </v-row>
   </v-card>
 </template>

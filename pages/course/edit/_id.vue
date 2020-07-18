@@ -11,7 +11,7 @@ export default {
     Course
   },
   data: () => ({
-    action: "Create"
+    action: "Edit"
   })
 };
 </script>
