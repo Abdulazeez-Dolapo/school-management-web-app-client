@@ -1,5 +1,5 @@
 <template>
-  <v-card @click.self="viewCourse(displayedCourse._id)" class="pb-0">
+  <v-card @click="viewCourse(displayedCourse._id)" class="pb-0">
     <v-row class="pa-2 ma-0 justify-start">
       <p
         class="title black--text ma-0 font-weight-medium text-truncate text-capitalize"

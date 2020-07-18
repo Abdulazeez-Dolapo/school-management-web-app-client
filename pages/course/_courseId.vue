@@ -72,7 +72,6 @@ import { handler } from "~/mixins/handler";
 export default {
   mounted() {
     this.courses = JSON.parse(localStorage.getItem("courses")) || [];
-    console.log(this.courses);
   },
   components: {
     notification,
