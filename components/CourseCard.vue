@@ -35,6 +35,10 @@ export default {
       required: true
     }
   },
-  methods: {}
+  methods: {
+    viewCourse(id) {
+      this.$router.push(`/course/${id}`);
+    }
+  }
 };
 </script>
