@@ -1,5 +1,5 @@
 <template>
-  <v-row class="ma-0 justify-center">
+  <v-row class="ma-0 justify-center pt-12">
     <v-col class="pa-0" cols="12" sm="9" md="6">
       <v-card class="pa-3">
         <p class="ma-0 text-h4 pb-5 black--text text-center">
@@ -77,6 +77,7 @@ import notification from "~/components/Notification";
 import loading from "~/components/Loading";
 import { handler } from "~/mixins/handler";
 export default {
+  layout: "authentication",
   components: {
     notification,
     loading

@@ -76,10 +76,11 @@
 export default {
   computed: {
     userType() {
+      if (!this.$auth.$state.loggedIn) return;
       return this.$auth.$state.user.role == "Tutor" ? "tutor" : "student";
     },
     items() {
-      return [
+      let items = [
         {
           icon: "mdi-apps",
           title: "Home",
@@ -89,8 +90,18 @@ export default {
           icon: "mdi-chart-bubble",
           title: "Dashboard",
           to: `/dashboard/${this.userType}`
+        },
+        {
+          icon: "mdi-chart-bubble",
+          title: "Create Course",
+          to: `/course/create`
         }
       ];
+      if (this.$auth.$state.user.role == "Tutor") {
+        return items;
+      }
+      items.length = 2;
+      return items;
     }
   },
   data() {

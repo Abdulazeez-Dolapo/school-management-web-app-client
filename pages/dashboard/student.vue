@@ -33,7 +33,7 @@ export default {
   components: {
     card
   },
-  middleware: "auth",
+  middleware: ["auth", "student-guard"],
   mounted() {
     this.courses = JSON.parse(localStorage.getItem("courses"));
     this.userDetails = this.$auth.$state.user;
