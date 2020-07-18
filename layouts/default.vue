@@ -27,7 +27,7 @@
 
     <v-app-bar :clipped-left="clipped" fixed app class="elevation-0">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title v-text="title" />
+      <v-toolbar-title class="hover" @click="home" v-text="title" />
       <v-spacer />
       <v-btn text to="/login" class="ma-0" v-if="!$auth.$state.loggedIn">
         Login
@@ -98,7 +98,15 @@ export default {
   methods: {
     logout() {
       this.$auth.logout();
+    },
+    home() {
+      this.$router.push("/");
     }
   }
 };
 </script>
+<style>
+.hover:hover {
+  cursor: pointer;
+}
+</style>

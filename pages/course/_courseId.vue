@@ -35,28 +35,50 @@
           </p>
         </v-row>
 
-        <v-row class="pa-2 ma-0 justify-start">
-          <v-btn depressed color="primary">
+        <v-row
+          class="pa-2 ma-0 justify-start"
+          v-if="$auth.$state.loggedIn && $auth.$state.user.role == 'Student'"
+        >
+          <v-btn
+            v-if="!registered"
+            depressed
+            color="primary"
+            @click="registerForCourse"
+          >
             Register
+          </v-btn>
+
+          <v-btn v-else depressed color="red" @click="cancelRegistration">
+            Cancel Registration
           </v-btn>
         </v-row>
       </v-card>
     </v-col>
+
+    <notification
+      @close="close"
+      :dialog="notificationDialog"
+      :text="notificationText"
+    />
+    <loading :dialog="loadingDialog" :text="loadingText" />
   </v-row>
 </template>
 
 <script>
 import notification from "~/components/Notification";
 import loading from "~/components/Loading";
-import { handler } from "../mixins/handler";
+import { handler } from "~/mixins/handler";
 
 export default {
+  components: {
+    notification,
+    loading
+  },
   async asyncData({ $axios, params }) {
     try {
       const { course } = await $axios.$get(
         `/api/course/get-course/${params.courseId}`
       );
-      console.log(course);
       return {
         course
       };
@@ -64,7 +86,46 @@ export default {
       console.log(error.response);
     }
   },
-  mixins: [handler]
+  mixins: [handler],
+  data: () => ({
+    timer: ""
+  }),
+  computed: {
+    registered() {
+      return true;
+    }
+  },
+  methods: {
+    async registerForCourse() {
+      try {
+        this.loadingDialog = true;
+        this.loadingText = "Registering for course";
+        const payload = {
+          userId: this.$auth.$state.user._id,
+          courseId: this.$route.params.courseId
+        };
+        const { message } = await this.$axios.$post(
+          `/api/course/registration/register`,
+          payload
+        );
+        this.notificationDialog = true;
+        this.notificationText = message;
+        this.loadingDialog = false;
+        this.loadingText = "";
+        this.timer = setTimeout(() => {
+          this.close();
+        }, 3000);
+      } catch (error) {
+        this.handleError(error);
+      }
+    },
+    cancelRegistration() {},
+    close() {
+      clearTimeout(this.timer);
+      this.notificationDialog = false;
+      this.notificationText = "";
+    }
+  }
 };
 </script>
 

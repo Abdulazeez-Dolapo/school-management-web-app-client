@@ -22,7 +22,6 @@ export default {
   async asyncData({ $axios }) {
     try {
       const { courses } = await $axios.$get("/api/course/get-all-courses");
-      console.log(courses);
       return {
         courses
       };

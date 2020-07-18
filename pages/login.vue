@@ -56,7 +56,7 @@
 <script>
 import notification from "~/components/Notification";
 import loading from "~/components/Loading";
-import { handler } from "../mixins/handler";
+import { handler } from "~/mixins/handler";
 export default {
   components: {
     notification,
