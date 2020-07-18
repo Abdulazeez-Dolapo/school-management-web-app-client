@@ -43,13 +43,18 @@
             :rules="passwordRules"
             v-model.trim="password"
           ></v-text-field>
-        </v-form>
 
-        <v-row class="ma-0 justify-center align-center pb-4">
-          <v-btn depressed color="primary" block @click="register"
-            >Sign Up</v-btn
-          >
-        </v-row>
+          <v-row class="ma-0 justify-center align-center pb-4">
+            <v-btn
+              type="submit"
+              depressed
+              color="primary"
+              block
+              @click.prevent="register"
+              >Sign Up</v-btn
+            >
+          </v-row>
+        </v-form>
 
         <v-row class="ma-0 justify-center align-center">
           <span class="ma-0">

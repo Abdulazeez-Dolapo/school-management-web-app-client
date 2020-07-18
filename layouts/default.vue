@@ -97,7 +97,10 @@ export default {
           to: `/course/create`
         }
       ];
-      if (this.$auth.$state.user.role == "Tutor") {
+      if (
+        this.$auth.$state.loggedIn &&
+        this.$auth.$state.user.role == "Tutor"
+      ) {
         return items;
       }
       items.length = 2;

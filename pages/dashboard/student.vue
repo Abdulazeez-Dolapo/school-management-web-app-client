@@ -35,11 +35,18 @@ export default {
   },
   middleware: ["auth", "student-guard"],
   mounted() {
-    this.courses = JSON.parse(localStorage.getItem("courses"));
+    localStorage.setItem("courses", JSON.stringify(this.courses));
     this.userDetails = this.$auth.$state.user;
   },
+  async asyncData({ $axios }) {
+    const { courses } = await $axios.$get(
+      `/api/course/registration/get-all-courses-registered`
+    );
+    return {
+      courses
+    };
+  },
   data: () => ({
-    courses: [],
     userDetails: {}
   })
 };

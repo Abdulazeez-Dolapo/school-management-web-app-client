@@ -91,11 +91,18 @@ export default {
   middleware: ["auth", "tutor-guard"],
   mixins: [handler],
   mounted() {
-    this.populateCourses();
     this.userDetails = this.$auth.$state.user;
+    localStorage.setItem("courses", JSON.stringify(this.courses));
+  },
+  async asyncData({ $axios }) {
+    const { courses } = await $axios.$get(
+      `/api/course/registration/get-all-courses-created`
+    );
+    return {
+      courses
+    };
   },
   data: () => ({
-    courses: [],
     userDetails: {},
     deleteDialog: false,
     timer: "",

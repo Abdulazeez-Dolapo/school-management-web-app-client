@@ -35,13 +35,18 @@
             :rules="priceRules"
             v-model.number="price"
           ></v-text-field>
-        </v-form>
 
-        <v-row class="ma-0 justify-center align-center pb-4">
-          <v-btn depressed color="primary" block @click="takeAction"
-            >{{ action }} Course</v-btn
-          >
-        </v-row>
+          <v-row class="ma-0 justify-center align-center pb-4">
+            <v-btn
+              type="submit"
+              depressed
+              color="primary"
+              block
+              @click.prevent="takeAction"
+              >{{ action }} Course</v-btn
+            >
+          </v-row>
+        </v-form>
       </v-card>
     </v-col>
 
