@@ -7,34 +7,34 @@
       {{ otherError }}
     </h1>
     <NuxtLink to="/">
-      Home page
+      Go back to the home page
     </NuxtLink>
   </v-app>
 </template>
 
 <script>
 export default {
-  layout: 'empty',
+  layout: "empty",
   props: {
     error: {
       type: Object,
       default: null
     }
   },
-  data () {
+  data() {
     return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
-    }
+      pageNotFound: "Page Not Found.",
+      otherError: "An error occurred, Please go back and try again or"
+    };
   },
-  head () {
+  head() {
     const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError
+      this.error.statusCode === 404 ? this.pageNotFound : this.otherError;
     return {
       title
-    }
+    };
   }
-}
+};
 </script>
 
 <style scoped>

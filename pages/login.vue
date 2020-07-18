@@ -54,8 +54,8 @@
 </template>
 
 <script>
-import notification from "~/components/notification";
-import loading from "~/components/loading";
+import notification from "~/components/Notification";
+import loading from "~/components/Loading";
 import { handler } from "../mixins/handler";
 export default {
   components: {
@@ -92,15 +92,16 @@ export default {
         this.notificationDialog = false;
         this.notificationText = "";
 
-        this.$auth.loginWith("local", {
+        const res = await this.$auth.loginWith("local", {
           data: {
             email: this.email,
             password: this.password
           }
         });
 
-        this.loadingDialog = false;
+        console.log(res);
         this.$router.push("/");
+        this.loadingDialog = false;
       } catch (error) {
         this.handleError(error);
       }
