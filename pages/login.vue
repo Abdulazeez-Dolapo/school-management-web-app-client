@@ -85,9 +85,12 @@ export default {
   },
   methods: {
     async login() {
+      // Remove any residual courses in local storage
+      localStorage.removeItem("courses");
       try {
         // Validate form inputs
         if (!this.$refs.loginForm.validate()) return;
+        this.loadingText = "Loggin in";
         this.loadingDialog = true;
         this.notificationDialog = false;
         this.notificationText = "";
@@ -99,7 +102,14 @@ export default {
           }
         });
 
-        console.log(res);
+        // Get all courses registered or created depending on user type
+        let URL = `/api/course/registration/get-all-courses-created`;
+        if (this.$auth.$state.user.role == "Student") {
+          URL = `/api/course/registration/get-all-courses-registered`;
+        }
+        const { courses } = await this.$axios.$get(URL);
+        localStorage.setItem("courses", JSON.stringify(courses));
+
         this.$router.push("/");
         this.loadingDialog = false;
       } catch (error) {

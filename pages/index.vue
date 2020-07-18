@@ -1,5 +1,5 @@
 <template>
-  <v-row class="ma-0 justify-center justify-md-start">
+  <v-row class="ma-0 justify-center justify-sm-start">
     <v-col
       class="pa-1"
       cols="12"

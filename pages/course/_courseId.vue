@@ -48,7 +48,7 @@
             Register
           </v-btn>
 
-          <v-btn v-else depressed color="red" @click="cancelRegistration">
+          <v-btn v-else depressed color="error" @click="cancelRegistration">
             Cancel Registration
           </v-btn>
         </v-row>
@@ -70,6 +70,10 @@ import loading from "~/components/Loading";
 import { handler } from "~/mixins/handler";
 
 export default {
+  mounted() {
+    this.courses = JSON.parse(localStorage.getItem("courses")) || [];
+    console.log(this.courses);
+  },
   components: {
     notification,
     loading
@@ -88,26 +92,72 @@ export default {
   },
   mixins: [handler],
   data: () => ({
-    timer: ""
+    timer: "",
+    courses: []
   }),
   computed: {
     registered() {
-      return true;
+      const coursesIdArray = this.courses.map(course => course.courseId._id);
+      if (coursesIdArray.includes(this.$route.params.courseId)) return true;
+      return false;
     }
   },
   methods: {
     async registerForCourse() {
       try {
+        clearTimeout(this.timer);
         this.loadingDialog = true;
         this.loadingText = "Registering for course";
         const payload = {
           userId: this.$auth.$state.user._id,
           courseId: this.$route.params.courseId
         };
-        const { message } = await this.$axios.$post(
+
+        const { message, registeredCourse } = await this.$axios.$post(
           `/api/course/registration/register`,
           payload
         );
+        const course = {
+          courseId: this.course,
+          userId: this.$auth.$state.user._id,
+          _id: registeredCourse._id
+        };
+
+        this.courses.push(course);
+        localStorage.setItem("courses", JSON.stringify(this.courses));
+
+        this.notificationDialog = true;
+        this.notificationText = message;
+        this.loadingDialog = false;
+        this.loadingText = "";
+        this.timer = setTimeout(() => {
+          this.close();
+        }, 3000);
+      } catch (error) {
+        console.log(error.response);
+        this.handleError(error);
+      }
+    },
+    async cancelRegistration() {
+      try {
+        clearTimeout(this.timer);
+        this.loadingDialog = true;
+        this.loadingText = "Canceling course registration";
+
+        const registrationId = this.courses.find(
+          course => course.courseId._id == this.$route.params.courseId
+        );
+        const { message } = await this.$axios.$delete(
+          `/api/course/registration/cancel/${registrationId._id}`
+        );
+
+        // Remove registration id from the list of registered courses
+        const courses = this.courses.filter(
+          course => course._id !== registrationId._id
+        );
+        this.courses = courses;
+        localStorage.setItem("courses", JSON.stringify(courses));
+
         this.notificationDialog = true;
         this.notificationText = message;
         this.loadingDialog = false;
@@ -119,7 +169,6 @@ export default {
         this.handleError(error);
       }
     },
-    cancelRegistration() {},
     close() {
       clearTimeout(this.timer);
       this.notificationDialog = false;

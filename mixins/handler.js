@@ -10,7 +10,7 @@ export const handler = {
   methods: {
     handleError(error) {
       clearTimeout(this.timer);
-      if (error.response.data.message) {
+      if (!!error.response.data.message) {
         this.notificationText = error.response.data.message;
       } else {
         this.notificationText = error.response;

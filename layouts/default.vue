@@ -97,6 +97,7 @@ export default {
   },
   methods: {
     logout() {
+      localStorage.removeItem("courses");
       this.$auth.logout();
     },
     home() {
