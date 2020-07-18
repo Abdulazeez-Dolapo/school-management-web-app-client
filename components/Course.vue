@@ -3,61 +3,43 @@
     <v-col class="pa-0" cols="12" sm="9" md="6">
       <v-card class="pa-3">
         <p class="ma-0 text-h4 pb-5 black--text text-center">
-          Create Account
+          {{ action }} Course
         </p>
-        <v-form ref="registerForm">
-          <v-select
-            outlined
-            label="Register as"
-            dense
-            primary
-            v-model="role"
-            :items="roles"
-          ></v-select>
+        <v-form ref="courseForm">
           <v-text-field
             dense
             type="text"
             primary
-            label="Username"
+            label="Course Title"
             outlined
-            :rules="nameRules"
-            v-model.trim="username"
+            :rules="titleRules"
+            v-model.trim="title"
           ></v-text-field>
+
           <v-text-field
             dense
-            label="Email"
+            type="text"
             primary
-            type="email"
+            label="Course Description"
             outlined
-            :rules="emailRules"
-            v-model.trim="email"
+            :rules="descriptionRules"
+            v-model.trim="description"
           ></v-text-field>
+
           <v-text-field
             dense
+            type="number"
             primary
-            :append-icon="showText ? 'mdi-eye' : 'mdi-eye-off'"
+            label="Course Price"
             outlined
-            :type="showText ? 'text' : 'password'"
-            label="Password"
-            @click:append="showText = !showText"
-            :rules="passwordRules"
-            v-model.trim="password"
+            :rules="priceRules"
+            v-model.number="price"
           ></v-text-field>
         </v-form>
 
         <v-row class="ma-0 justify-center align-center pb-4">
-          <v-btn depressed color="primary" block @click="register"
-            >Sign Up</v-btn
-          >
-        </v-row>
-
-        <v-row class="ma-0 justify-center align-center">
-          <span class="ma-0">
-            Already have an account?
-          </span>
-          <v-spacer></v-spacer>
-          <v-btn color="green" class="white--text" to="/login" depressed
-            >Login</v-btn
+          <v-btn depressed color="primary" block @click="takeAction"
+            >{{ action }} Course</v-btn
           >
         </v-row>
       </v-card>
@@ -78,42 +60,77 @@ import loading from "~/components/Loading";
 import { handler } from "~/mixins/handler";
 
 export default {
-  layout: "authentication",
   components: {
     notification,
     loading
   },
-  middleware: "auth",
-  auth: "guest",
   mixins: [handler],
+  mounted() {
+    if (this.action == "Edit") {
+      this.getCourse(this.$route.params.id);
+    }
+  },
+  props: {
+    action: {
+      type: String,
+      default: "Create"
+    }
+  },
   data() {
     return {
-      showText: false,
       timer: "",
-      username: "",
-      role: "Student",
-      email: "",
-      password: "",
-      roles: ["Student", "Tutor"],
-      nameRules: [
-        v => !!v || "Username is required",
-        v => v.length <= 8 || "Username must be 8 characters or less"
+      title: "",
+      description: "",
+      price: 0,
+      titleRules: [
+        v => !!v || "Title is required",
+        v => v.length >= 3 || "Title must be at least 3 characters"
       ],
-      passwordRules: [
-        v => !!v || "Password is required",
-        v => v.length >= 8 || "Password must be at least 8 characters",
-        v => v.length <= 16 || "Password must be not be more than 16 characters"
+      descriptionRules: [
+        v => !!v || "Description is required",
+        v => v.length >= 3 || "Description must be at least 3 characters"
       ],
-      emailRules: [
-        v => !!v || "E-mail is required",
-        v =>
-          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-          "E-mail must be valid"
+      priceRules: [
+        v => !!v || "Price is required",
+        v => typeof v == "number" || "Price must be a number"
       ]
     };
   },
   methods: {
-    async register() {
+    takeAction() {
+      if (this.action == "Create") this.createCourse();
+      if (this.action == "Edit") this.editCourse();
+    },
+    async createCourse() {
+      try {
+        // Validate form inputs
+        if (!this.$refs.courseForm.validate()) return;
+        this.loadingDialog = true;
+        this.loadingText = "Creating course";
+
+        const data = {
+          title: this.title,
+          description: this.description,
+          price: this.price
+        };
+
+        let { course, message } = await this.$axios.$post(
+          "/api/course/create",
+          data
+        );
+        console.log(course);
+        this.loadingDialog = false;
+        this.notificationDialog = true;
+        this.notificationText = message;
+
+        setTimeout(() => {
+          this.$router.push("/");
+        }, 1000);
+      } catch (error) {
+        this.handleError(error);
+      }
+    },
+    async editCourse() {
       try {
         // Validate form inputs
         if (!this.$refs.registerForm.validate()) return;
