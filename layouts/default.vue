@@ -49,8 +49,8 @@
       </template>
 
       <template v-if="$auth.$state.loggedIn">
-        <v-btn to="/dashboard" class="text-capitalize" text>
-          <span>Welcome, </span> {{ $auth.$state.user.name }}
+        <v-btn :to="`/dashboard/${userType}`" class="text-capitalize" text>
+          {{ $auth.$state.user.name }}
         </v-btn></template
       >
     </v-app-bar>
@@ -74,12 +74,12 @@
 
 <script>
 export default {
-  data() {
-    return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
+  computed: {
+    userType() {
+      return this.$auth.$state.user.role == "Tutor" ? "tutor" : "student";
+    },
+    items() {
+      return [
         {
           icon: "mdi-apps",
           title: "Home",
@@ -88,9 +88,16 @@ export default {
         {
           icon: "mdi-chart-bubble",
           title: "Dashboard",
-          to: "/dashboard"
+          to: `/dashboard/${this.userType}`
         }
-      ],
+      ];
+    }
+  },
+  data() {
+    return {
+      clipped: false,
+      drawer: false,
+      fixed: false,
       miniVariant: false,
       title: "School Management App"
     };
