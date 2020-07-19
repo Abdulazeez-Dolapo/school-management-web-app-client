@@ -3,6 +3,9 @@ const URL = "http://localhost:4000";
 
 export default {
   mode: "universal",
+  generate: {
+    fallback: true
+  },
   /*
    ** Headers of the page
    */
