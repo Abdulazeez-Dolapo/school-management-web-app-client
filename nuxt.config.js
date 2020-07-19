@@ -1,63 +1,72 @@
-import colors from 'vuetify/es5/util/colors'
+import colors from "vuetify/es5/util/colors";
+const URL = "https://school-management-app-task.herokuapp.com";
 
 export default {
-  mode: 'universal',
-  /*
-  ** Headers of the page
-  */
-  head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
-    title: process.env.npm_package_name || '',
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
-    ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+  mode: "universal",
+  generate: {
+    fallback: true
   },
   /*
-  ** Customize the progress-bar color
-  */
-  loading: { color: '#fff' },
+   ** Headers of the page
+   */
+  head: {
+    titleTemplate: "%s - " + process.env.npm_package_name,
+    title: process.env.npm_package_name || "",
+    meta: [
+      { charset: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        hid: "description",
+        name: "description",
+        content: process.env.npm_package_description || ""
+      }
+    ],
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
+  },
   /*
-  ** Global CSS
-  */
-  css: [
-  ],
+   ** Customize the progress-bar color
+   */
+  loading: { color: "green" },
   /*
-  ** Plugins to load before mounting the App
-  */
-  plugins: [
-  ],
+   ** Global CSS
+   */
+  css: [],
   /*
-  ** Nuxt.js dev-modules
-  */
-  buildModules: [
-    '@nuxtjs/vuetify',
-  ],
+   ** Plugins to load before mounting the App
+   */
+  // plugins: ["~/plugins/handleError"],
   /*
-  ** Nuxt.js modules
-  */
+   ** Nuxt.js dev-modules
+   */
+  buildModules: ["@nuxtjs/vuetify"],
+  /*
+   ** Nuxt.js modules
+   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
+    "@nuxtjs/axios",
+    "@nuxtjs/auth"
   ],
   /*
-  ** Axios module configuration
-  ** See https://axios.nuxtjs.org/options
-  */
+   ** Axios module configuration
+   ** See https://axios.nuxtjs.org/options
+   */
   axios: {
+    proxy: true,
+    baseURL: URL
+  },
+
+  proxy: {
+    "/api": URL
   },
   /*
-  ** vuetify module configuration
-  ** https://github.com/nuxt-community/vuetify-module
-  */
+   ** vuetify module configuration
+   ** https://github.com/nuxt-community/vuetify-module
+   */
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
+    customVariables: ["~/assets/variables.scss"],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
@@ -72,13 +81,24 @@ export default {
     }
   },
   /*
-  ** Build configuration
-  */
+   ** Build configuration
+   */
   build: {
     /*
-    ** You can extend webpack config here
-    */
-    extend (config, ctx) {
+     ** You can extend webpack config here
+     */
+    extend(config, ctx) {}
+  },
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            propertyName: "token"
+          },
+          logout: true
+        }
+      }
     }
   }
-}
+};
