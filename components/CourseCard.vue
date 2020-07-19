@@ -34,9 +34,6 @@
 
 <script>
 export default {
-  mounted() {
-    console.log(this.course);
-  },
   props: {
     course: {
       type: Object,

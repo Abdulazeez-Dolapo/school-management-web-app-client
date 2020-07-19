@@ -1,5 +1,5 @@
 import colors from "vuetify/es5/util/colors";
-const URL = "http://localhost:4000";
+const URL = "https://school-management-app-task.herokuapp.com";
 
 export default {
   mode: "universal",

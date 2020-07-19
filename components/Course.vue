@@ -171,7 +171,6 @@ export default {
           this.$router.push({ path: "/dashboard/tutor" });
         }, 1000);
       } catch (error) {
-        // console.log(error);
         this.handleError(error);
       }
     },
