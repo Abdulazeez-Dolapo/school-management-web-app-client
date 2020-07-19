@@ -7,8 +7,14 @@
     </v-row>
 
     <v-row class="ma-0 pl-1 justify-center justify-md-start">
-      <p class="ma-0 pb-2">
+      <p class="ma-0 pb-2" v-if="courses.length > 0">
         Here are a list of courses you have created
+      </p>
+
+      <p class="ma-0 pb-2" v-else>
+        You have not created any courses. Please go to the
+        <nuxt-link to="/course/create">course creation</nuxt-link> page to
+        create one
       </p>
     </v-row>
 

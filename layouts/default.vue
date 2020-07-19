@@ -63,9 +63,11 @@
 
     <v-footer :fixed="fixed" app>
       <v-row class="ma-0 justify-center">
-        <span
-          >Abdulazeez Dolapo Abdulrafiu &copy;
-          {{ new Date().getFullYear() }}</span
+        <a
+          href="https://www.linkedin.com/in/abdulazeezabdulrafiudolapo96"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Abdulazeez Dolapo Abdulrafiu &copy; {{ new Date().getFullYear() }}</a
         >
       </v-row>
     </v-footer>

@@ -7,8 +7,13 @@
     </v-row>
 
     <v-row class="ma-0 pl-1 justify-center justify-md-start">
-      <p class="ma-0 pb-2">
+      <p class="ma-0 pb-2" v-if="courses.length > 0">
         Here are a list of courses you registered for
+      </p>
+
+      <p class="ma-0 pb-2" v-else>
+        You have not registered for any courses. Please go back to the home page
+        and register for one
       </p>
     </v-row>
 
